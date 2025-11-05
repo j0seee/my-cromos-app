@@ -1,0 +1,626 @@
+/* ===========================
+   Barra de navegación centrada (mejorada)
+   =========================== */
+
+.app-navbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* contenedor interno estrecho y elevado */
+.navbar-inner {
+  width: 60%;
+  max-width: 1100px;
+  min-width: 320px;
+  background: linear-gradient(180deg, rgba(112,214,255,0.95), rgba(112,214,255,0.9));
+  border-radius: 20px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 18px 40px rgba(2,6,23,0.14);
+  margin: 0 auto;
+  transition: box-shadow .18s ease, transform .12s ease, background .12s ease;
+}
+
+/* responsive: en pantallas pequeñas, ocupa más ancho */
+@media (max-width: 880px) {
+  .navbar-inner { width: 92%; padding: 10px; gap: 8px; }
+  .nav-center { order: 1; flex-basis: 100%; text-align: center; margin: 6px 0; }
+  .nav-left, .nav-right { flex-basis: auto; }
+}
+
+/* layout interno */
+.nav-side {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* left / right alignment */
+.nav-left { justify-content: flex-start; }
+.nav-right { justify-content: flex-end; margin-left: auto; }
+
+/* center logo/title */
+.nav-center {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* logo text (centro) */
+.nav-logo-text {
+  color: white;
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+/* si prefieres usar imagen logo, aplica tamaño */
+.nav-logo {
+  height: 36px;
+  width: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.12);
+}
+
+/* botones / links dentro de la barra */
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: background .14s ease, transform .08s ease, box-shadow .12s ease;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+/* small variant */
+.nav-btn.small { padding: 6px 10px; font-size: 0.95rem; border-radius: 8px; }
+
+/* hover: oscurecer el botón y elevarlo visualmente */
+.nav-btn:hover {
+  background: rgba(0,0,0,0.14);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(2,6,23,0.12);
+}
+
+/* active: estilo persistente para la ruta actual */
+.nav-btn.active,
+.nav-btn[aria-current="page"] {
+  background: rgba(0,0,0,0.22);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08), 0 8px 26px rgba(2,6,23,0.16);
+  transform: none;
+}
+
+/* usuario a la izquierda */
+.nav-user {
+  color: rgba(255,255,255,0.95);
+  font-weight: 700;
+  margin-right: 6px;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.08);
+}
+
+/* focus visible accesible */
+.nav-btn:focus { outline: 3px solid rgba(255,255,255,0.12); outline-offset: 2px; }
+
+/* evitar wrapping en botones */
+.nav-left a, .nav-left button, .nav-right a { white-space: nowrap; }
+
+/* sutil ajuste para contraste de título */
+.nav-title { text-shadow: 0 1px 0 rgba(0,0,0,0.06); color: #fff; text-decoration: none; }
+
+/* ===========================
+   Navbar: sticky y flotante (sin underline activo)
+   =========================== */
+
+/* permitimos usar la variable --nav-offset (set via JS) */
+:root { --nav-offset: 0; }
+
+/* header wrapper - sticky y flotante */
+.app-navbar {
+  position: sticky;
+  top: 16px;                      /* separación desde el top -> "flotante" */
+  z-index: 1400;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+  transition: transform .32s cubic-bezier(.2,.9,.2,1), opacity .22s ease;
+  padding: 8px 12px;              /* espacio alrededor para que se vea flotante */
+}
+
+/* cuando ocultamos, desplazamos hacia arriba */
+.app-navbar.nav--hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* contenedor interno con efecto glass al hacer scroll */
+.navbar-inner {
+  width: 60%;
+  max-width: 1100px;
+  min-width: 320px;
+  background: linear-gradient(180deg, rgba(112,214,255,0.95), rgba(112,214,255,0.9));
+  border-radius: 20px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+  transition: box-shadow .18s ease, transform .12s ease, background .12s ease, backdrop-filter .18s ease;
+  /* glass effect */
+  backdrop-filter: blur(0px) saturate(100%);
+  -webkit-backdrop-filter: blur(0px) saturate(100%);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* cuando hemos scrolleado un poco: blur + sombra más fuerte */
+.app-navbar.nav--scrolled .navbar-inner {
+  box-shadow: 0 22px 50px rgba(2,6,23,0.18);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  background: linear-gradient(180deg, rgba(112,214,255,0.88), rgba(112,214,255,0.82));
+  transform: translateY(-2px);
+}
+
+/* layout interno */
+.nav-side { display:flex; gap:8px; align-items:center; flex:0 0 auto; }
+.nav-left { justify-content:flex-start; }
+.nav-right { justify-content:flex-end; margin-left:auto; }
+.nav-center { flex:1 1 auto; display:flex; justify-content:center; align-items:center; }
+
+/* logo text parallax: usa la var que actualiza JS */
+.nav-logo-text {
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  display: inline-block;
+  transform: translateY(calc(var(--nav-offset) * -0.08px)); /* sutíl parallax: sube al scrollear */
+  transition: transform .12s linear;
+}
+
+/* nav buttons */
+.nav-btn {
+  position: relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 8px 14px;
+  color: white;
+  text-decoration:none;
+  border-radius: 10px;
+  font-weight: 800;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: background .14s ease, transform .12s ease, box-shadow .12s ease;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+/* micro-interaction: subtle scale + glow on hover */
+.nav-btn:hover {
+  background: rgba(0,0,0,0.14);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.12);
+}
+
+/* small variant */
+.nav-btn.small { padding:6px 10px; font-size:0.95rem; border-radius:8px; }
+
+/* ACTIVE: ya no mostramos underline; en su lugar cambiamos fondo y sombra persistente */
+.nav-btn.active,
+.nav-btn[aria-current="page"] {
+  background: rgba(0,0,0,0.22);
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08), 0 8px 26px rgba(2,6,23,0.16);
+  transform: none;
+}
+
+/* quitamos el pseudo-elemento underline (si existía antes) */
+.nav-btn::after { display: none !important; content: none !important; }
+
+/* focus visible */
+.nav-btn:focus { outline: 3px solid rgba(255,255,255,0.12); outline-offset: 3px; }
+
+/* user text */
+.nav-user { color: rgba(255,255,255,0.95); font-weight:700; margin-right:6px; font-size:0.92rem; }
+
+/* responsive tweaks */
+@media (max-width:880px) {
+  .navbar-inner { width:92%; padding:10px; gap:8px; }
+  .nav-center { order:1; flex-basis:100%; text-align:center; margin:6px 0; }
+  .nav-left, .nav-right { flex-basis:auto; }
+  .nav-logo-text { font-size: 0.98rem; }
+}
+
+/* Cuando el modal está abierto, ocultar la navbar y atenuar / deshabilitar interacciones */
+.modal-open .app-navbar {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* (Opcional) si quieres atenuar el fondo de la app además del overlay */
+.modal-open #__next > *:not(.modal-overlay) {
+  filter: blur(0.6px) brightness(0.95);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Botón Amigos y badge de notificaciones */
+.friends-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.notif-badge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #FF70A6;      /* color destacado de tu paleta */
+  color: white;
+  font-weight: 800;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  line-height: 1;
+}
+
+/* --------------------------
+  FIX GLOBAL LAYOUT & NAV
+  -------------------------- */
+
+/* Evitar scroll horizontal inesperado */
+html, body {
+  overflow-x: hidden; /* evita el 'wide' bug */ 
+}
+
+/* Asegura que main no provoque overflow lateral */
+main, #__next {
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Página contenedora: siempre centrada y responsiva */
+.page-container {
+  width: min(1200px, 96%);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* Asegura que los bloques no superen 100% y no rompan layout */
+* { box-sizing: border-box; }
+
+/* =========================
+   NAV BAR / BADGE FIXES
+   ========================= */
+
+/* Forzamos que el header .app-navbar no provoque overflow */
+.app-navbar {
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botón Amigos y badge */
+.friends-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+/* Badge: posicion absoluto relativo al botón para evitar desbordes */
+.notif-badge {
+  position: relative;              /* relative dentro del flex; evita overflow del header */
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #FF70A6;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  line-height: 1;
+  transform: translateY(-1px);     /* sutil ajuste vertical */
+}
+
+/* si quieres, badge en la esquina superior del botón (alternativa) */
+.friends-btn .notif-badge.top-right {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  transform: none;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+}
+
+/* =========================
+   FRIENDS PAGE LAYOUT
+   ========================= */
+
+/* Contenedor específico para /friends */
+.friends-page {
+  display: block;
+  gap: 16px;
+}
+
+/* Grid para la lista de amigos (cards) */
+.friends-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+  margin-top: 12px;
+}
+
+/* Estilo de tarjetas individuales en friends */
+.friend-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.06);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Info interna */
+.friend-card .info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.friend-card .avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background: linear-gradient(180deg,#eee,#fff);
+  display: inline-block;
+  object-fit: cover;
+}
+.friend-card .meta { display: flex; flex-direction: column; gap: 4px; }
+.friend-card .meta .name { font-weight: 800; color: #222; }
+.friend-card .meta .small { font-size: 13px; color: #666; }
+
+/* Actions (botones) a la derecha */
+.friend-card .actions { display: flex; gap: 8px; align-items: center; }
+
+/* Solicitudes: estilo de lista */
+.friend-requests-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+.friend-request {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+}
+.friend-request .who { font-weight: 700; color: #222; }
+.friend-request .when { font-size: 13px; color: #666; }
+
+/* Buttons reuse */
+.btn-ghost {
+  background: transparent;
+  color: #222;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================
+   SAFETY: deshacer modal-open si se queda pegada
+   ========================= */
+body.modal-open .app-navbar {
+  display: none !important; /* cuando modal abierto, ocultamos navbar (seguro) */
+}
+
+/* Fin de fixes */
+
+/* ---------- Friend notif dropdown & friends page styles ---------- */
+
+/* dropdown */
+.friends-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: min(420px, 86vw);
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 18px 40px rgba(2,6,23,0.14);
+  overflow: hidden;
+  z-index: 20000; /* por encima de casi todo */
+}
+
+/* friend-request inside dropdown */
+.friends-dropdown .friend-request {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+/* smaller layout for cards inside dropdown */
+.friends-dropdown .friend-request img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* friends-grid, friend-card, avatar reuse (if not present) */
+.friends-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.friend-card { background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 8px 20px rgba(2,6,23,0.06); display:flex; gap:12px; align-items:center; justify-content:space-between; }
+.friend-card .avatar, .friend-request .avatar { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; background: linear-gradient(180deg,#eee,#fff); }
+
+/* Buttons used in dropdown & friends page */
+.btn-ghost { background: transparent; color: #222; border: 1px solid rgba(0,0,0,0.06); padding: 8px 12px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.btn-primary { background: var(--color-primary); color: white; padding: 8px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+/* badge positioning */
+.notif-badge.top-right {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* responsive tweaks */
+@media (max-width: 640px) {
+  .friends-dropdown { right: 8px; left: 8px; width: auto; top: calc(100% + 8px); }
+  .friend-card { flex-direction: column; align-items: flex-start; }
+}
+
+/* --------------------------
+  FriendNotifBell: estilos pulidos
+  -------------------------- */
+
+/* dropdown */
+.friends-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: min(420px, 86vw);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 48px rgba(2,6,23,0.18);
+  overflow: hidden;
+  z-index: 20000;
+  border: 1px solid rgba(0,0,0,0.06);
+  animation: dropdownFade 180ms ease both;
+}
+
+/* small header with count */
+.friends-dropdown .dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98));
+}
+
+/* body scroll */
+.friends-dropdown .dropdown-body {
+  max-height: 320px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* footer */
+.friends-dropdown .dropdown-footer {
+  padding: 8px;
+  border-top: 1px solid rgba(0,0,0,0.04);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* each request row */
+.friend-request.dropdown-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px dashed rgba(0,0,0,0.02);
+}
+.friend-request .friend-left { flex: 0 0 auto; }
+.friend-request .friend-middle { flex: 1 1 auto; min-width: 0; }
+.friend-request .friend-right { flex: 0 0 auto; display:flex; gap:8px; align-items:center; }
+
+/* avatar for dropdown */
+.friends-dropdown .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: linear-gradient(180deg,#eee,#fff);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+/* who + when */
+.friend-request .who { font-weight: 800; color: #222; }
+.friend-request .when { font-size: 12px; color: #666; margin-top: 3px; }
+
+/* buttons inside dropdown - compact */
+.friends-dropdown .btn-primary { padding: 6px 10px; font-size: 13px; }
+.friends-dropdown .btn-ghost { padding: 6px 10px; font-size: 13px; border: 1px solid rgba(0,0,0,0.06); }
+
+/* empty state */
+.friends-dropdown .dropdown-empty { padding: 16px; color: #666; text-align: center; }
+
+/* pulse animation on the button when new request arrives */
+.nav-btn.friends-btn.pulse {
+  animation: pulseBadge 800ms ease;
+}
+
+/* dropdown open animation */
+@keyframes dropdownFade {
+  from { transform: translateY(-6px) scale(.99); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* pulse keyframes */
+@keyframes pulseBadge {
+  0% { transform: translateY(0) scale(1); box-shadow: 0 6px 14px rgba(2,6,23,0.08); }
+  30% { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 32px rgba(2,6,23,0.14); }
+  100% { transform: translateY(0) scale(1); box-shadow: 0 6px 14px rgba(2,6,23,0.08); }
+}
+
+/* small responsiveness */
+@media (max-width: 640px) {
+  .friends-dropdown { right: 8px; left: 8px; width: auto; top: calc(100% + 8px); }
+  .friend-request.dropdown-item { gap: 8px; padding: 8px; }
+}
+
+

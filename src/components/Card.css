@@ -1,0 +1,105 @@
+/* Carta */
+.card {
+  position: relative;
+  border: 2px solid #FF9770; /* naranja */
+  border-radius: 12px;
+  padding: 16px;
+  max-width: 220px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-image {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.card-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.card-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.card-code {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* Estrellas */
+.stars .star {
+  color: #FFD670; /* amarillo */
+}
+
+.stars .star-empty {
+  color: #ccc;
+}
+
+/* Diamantes */
+.diamonds .diamond {
+  color: #FF70A6; /* rosa */
+  margin-right: 4px;
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #FF70A6;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  border: 1px solid #FF70A6;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  transition: opacity 0.3s ease-out;
+}
+
+.modal-content {
+  transform: scale(0.95);
+  transition: transform 0.3s ease-out;
+}
+
+.modal-content:hover {
+  transform: scale(1);
+}
+
+.modal-content img {
+  max-height: 90vh;
+  max-width: 90vw;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
